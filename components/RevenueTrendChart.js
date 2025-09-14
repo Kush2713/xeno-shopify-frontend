@@ -13,10 +13,28 @@ export default function RevenueTrendChart() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/shopify/revenue-trend")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/revenue-trend`)
       .then((res) => res.json())
-      .then(setData)
-      .catch((err) => console.error(err));
+      .then((apiData) => {
+        // Aggregate revenue by date
+        const revenueMap = {};
+
+        apiData.forEach((item) => {
+          if (!revenueMap[item.date]) {
+            revenueMap[item.date] = 0;
+          }
+          revenueMap[item.date] += item.revenue;
+        });
+
+        // Convert back to array for chart
+        const formatted = Object.keys(revenueMap).map((date) => ({
+          date,
+          revenue: revenueMap[date],
+        }));
+
+        setData(formatted);
+      })
+      .catch((err) => console.error("Error fetching revenue trend:", err));
   }, []);
 
   return (
