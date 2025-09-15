@@ -109,38 +109,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Revenue Trend with Date Filter */}
-      // Inside Dashboard.js return()
-<div className="bg-white p-4 shadow rounded space-y-4">
-  <h2 className="text-xl font-semibold">Revenue Trend</h2>
-
-  {/* Date Range Picker */}
-  <div className="flex gap-4 items-center">
-    <input
-      type="date"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-      className="border p-2 rounded"
-    />
-    <input
-      type="date"
-      value={endDate}
-      onChange={(e) => setEndDate(e.target.value)}
-      className="border p-2 rounded"
-    />
-    <button
-      onClick={handleFilter}
-      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-    >
-      Apply
-    </button>
-  </div>
-
-  {/* Pass filtered data into chart */}
-  <RevenueTrendChart data={revenueData} />
-</div>
-
-
       {/* Top Customers */}
       <div className="bg-white p-4 shadow rounded">
         <h2 className="text-xl font-semibold mb-4">Top Customers</h2>
@@ -178,6 +146,35 @@ export default function Dashboard() {
             </li>
           ))}
         </ul>
+      </div>
+            {/* Revenue Trend with Date Filter */}
+      <div className="bg-white p-4 shadow rounded space-y-4">
+        <h2 className="text-xl font-semibold">Revenue Trend</h2>
+
+        {/* Date Range Picker */}
+        <div className="flex gap-4 items-center">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border p-2 rounded"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border p-2 rounded"
+          />
+          <button
+            onClick={handleFilter}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Apply
+          </button>
+        </div>
+
+        {/* Pass filtered data into chart */}
+        <RevenueTrendChart data={revenueData} />
       </div>
     </div>
   );
