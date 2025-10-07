@@ -19,11 +19,17 @@ Backend (Railway): https://xeno-shopify-backend-production.up.railway.app
 🚀 Features
 
 ✅ Shopify API Integration
+
 ✅ Multi-tenant data isolation
+
 ✅ Email-authenticated dashboard (via NextAuth)
+
 ✅ Revenue trend chart (line graph with date filter)
+
 ✅ Top products (bar chart + list with images)
+
 ✅ Top customers (pie chart)
+
 ✅ KPIs: total customers, orders, products, quantity sold, revenue
 
 🛠️ Setup Instructions
@@ -73,105 +79,190 @@ Start dev server:
 npm run dev
 
 📊 API Endpoints
+
 Endpoint	              Method	Description
+
 /shopify/products	       GET	  Sync products from Shopify
+
 /shopify/customers	       GET	  Sync customers from Shopify
+
 /shopify/orders	           GET	  Sync orders from Shopify
+
 /shopify/summary	       GET	  Get KPIs
+
 /shopify/top-products	   GET	  Get top products by revenue
+
 /shopify/top-customers	   GET	  Get top 5 customers by spend
+
 /shopify/revenue-trend	   GET	  Revenue trend (date range filter)
+
 /shopify/insights	       GET	  All metrics incl. quantity sold
+
 
 🧱 Database Schema
 
 Uses Prisma ORM and PostgreSQL:
 
 model Tenant {
+
   id        Int       @id @default(autoincrement())
+  
   name      String
+  
   domain    String    @unique
+  
   createdAt DateTime  @default(now())
+  
   products  Product[]
+  
   customers Customer[]
+  
   orders    Order[]
+  
 }
 
 model Product {
+
   id          Int      @id @default(autoincrement())
+  
   shopifyId   String   @unique
+  
   tenantId    Int
+  
   tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  
   title       String
+  
   description String?
+  
   price       Float
+  
   vendor      String?
+  
   productType String?
+  
   imageUrl    String?
+  
   createdAt   DateTime @default(now())
+  
 }
 
 model Customer {
+
   id         Int       @id @default(autoincrement())
+  
   shopifyId  String    @unique
+  
   tenantId   Int
+  
   tenant     Tenant    @relation(fields: [tenantId], references: [id])
+  
   firstName  String
+  
   lastName   String
+  
   email      String
+  
   totalSpent Float     @default(0)
+  
   createdAt  DateTime  @default(now())
+  
   orders     Order[]
+  
 }
 
 model Order {
+
   id          Int       @id @default(autoincrement())
+  
   shopifyId   String    @unique
+  
   tenantId    Int
+  
   tenant      Tenant    @relation(fields: [tenantId], references: [id])
+  
   customerId  Int
+  
   customer    Customer  @relation(fields: [customerId], references: [id])
+  
   total       Float
+  
   createdAt   DateTime  @default(now())
+  
   lineItems   Json
+  
 }
+
 📁 Folder Structure
 
 xeno-shopify-dashboard/
+
 ├── components
+
 │ ├── Dashboard.js
+
 │ ├── RevenueTrendChart.js
+
 │ ├── TopCustomersChart.js
+
 ├── lib
+
 │ └── api.js
+
 ├── pages
+
 │ └── index.js
+
 ├── public
+
 ├── styles
+
 ├── README.md
+
 ├── package.json
+
+
+
+
 
 
 xeno-shopify-backend/
+
 ├── controllers
+
 │ └── shopifyController.js
+
 ├── prisma
+
 │ ├── schema.prisma
+
 │ └── seed.js (optional, if you used seeding)
+
 ├── routes
+
 │ └── shopifyRoutes.js
+
 ├── services
+
 │ └── shopifyService.js
+
 ├── .env
+
 ├── .gitignore
+
 ├── index.js
+
 ├── package.json
+
 ├── package-lock.json
+
 ├── README.md
+
 
 🌍 Environment Variable (.env.local)
 
 Create a file named .env.local in your root and add:
+
 NEXT_PUBLIC_API_URL=https://xeno-shopify-backend-production.up.railway.app/shopify
 
 🏗️ Architecture Diagram
